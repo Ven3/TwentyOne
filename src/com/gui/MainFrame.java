@@ -13,6 +13,7 @@ public class MainFrame extends JFrame {
 		setSize(new Dimension(400, 600));
 		setLocationRelativeTo(null);
 		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }
