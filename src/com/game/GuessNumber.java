@@ -12,6 +12,9 @@ public class GuessNumber {
 		return count;
 	}
 
+	public int getAnswerNumber() {
+		return answerNumber;
+	}
 	
 
 
