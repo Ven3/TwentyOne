@@ -6,8 +6,9 @@ import java.awt.Font;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import com.frames.MainFrame;
-import com.frames.MyButton;
+
+import com.gui.MainFrame;
+import com.gui.MyButton;
 
 public class GameServer extends MainFrame implements ActionListener {
 

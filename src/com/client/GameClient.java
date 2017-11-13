@@ -10,9 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import com.frames.MainFrame;
-import com.frames.MyButton;
+
 import com.game.GuessNumber;
+import com.gui.MainFrame;
+import com.gui.MyButton;
 
 public class GameClient extends MainFrame implements ActionListener {
 
@@ -20,7 +21,7 @@ public class GameClient extends MainFrame implements ActionListener {
 	MyButton btnStart = new MyButton("开始游戏");
 	MyButton btnRestart = new MyButton("重新开始");
 	MyButton btnGuess = new MyButton("猜数");
-	MyButton btnAbout = new MyButton("关于");
+	MyButton btnStop = new MyButton("结束游戏");
 
 	TextField guessBox = new TextField();
 	TextArea messageBox = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
@@ -39,8 +40,8 @@ public class GameClient extends MainFrame implements ActionListener {
 
 		this.add(btnStart);
 		this.add(btnRestart);
+		this.add(btnStop);
 		this.add(btnConn);
-		this.add(btnAbout);
 		this.add(messageBox);
 
 		this.add(guessBox);
@@ -61,8 +62,8 @@ public class GameClient extends MainFrame implements ActionListener {
 		btnRestart.addActionListener(this);
 		btnConn.setActionCommand("Connect");
 		btnConn.addActionListener(this);
-		btnAbout.setActionCommand("About");
-		btnAbout.addActionListener(this);
+		btnStop.setActionCommand("Stop");
+		btnStop.addActionListener(this);
 		btnGuess.setActionCommand("Guess");
 		btnGuess.setBackground(new Color(0, 132, 255));
 		btnGuess.addActionListener(this);
@@ -72,9 +73,12 @@ public class GameClient extends MainFrame implements ActionListener {
 				int keyChar = e.getKeyChar();
 				if (keyChar >= KeyEvent.VK_0 && keyChar <= KeyEvent.VK_9 && guessBox.getText().length() < 3) {
 
+				} else if (keyChar == KeyEvent.VK_ENTER) {
+					actionPerformed(new ActionEvent(btnGuess, 0, "Guess"));
 				} else {
 					e.consume(); // 关键，屏蔽掉非法输入
 				}
+
 			}
 		});
 
@@ -89,9 +93,11 @@ public class GameClient extends MainFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		switch (e.getActionCommand()) {
 		case "Start":
+			messageBox.setText("");
 			startGame();
 			break;
 		case "Restart":
+			messageBox.setText("");
 			showMessage("游戏已重启!!");
 			startGame();
 			break;
@@ -99,7 +105,6 @@ public class GameClient extends MainFrame implements ActionListener {
 			aboutGame();
 			break;
 		case "Stop":
-			messageBox.append("游戏已结束!!\n");
 			stopGame();
 			break;
 		case "Guess":
@@ -108,27 +113,31 @@ public class GameClient extends MainFrame implements ActionListener {
 				break;
 			}
 			guessNumber(Integer.parseInt(guessBox.getText()));
-			showMessage("你猜的数是:" + guessBox.getText());
 			break;
 		case "Connect":
 			getConnection();
 
 		default:
+
 			break;
 		}
 
 	}
 
+	// 连接服务器
 	private void getConnection() {
 		// TODO Auto-generated method stub
 
 	}
 
+	// 开始猜数
 	private void guessNumber(int number) {
 		// TODO Auto-generated method stub
 		if (game == null) {
 			startGame();
 		}
+
+		showMessage("你猜的数是:" + number);
 		switch (game.guess(number)) {
 		case 1:
 			showMessage("猜大了");
@@ -139,22 +148,29 @@ public class GameClient extends MainFrame implements ActionListener {
 		case 0:
 			showMessage("恭喜你！猜中了");
 			showMessage("您共猜了" + game.getCount() + "次");
-			showMessage("正确答案是:"+game.getAnswerNumber());
+			showMessage("正确答案是:" + game.getAnswerNumber());
 			break;
 		}
+		guessBox.setText("");
 
 	}
 
+	// 结束游戏
 	private void stopGame() {
 		// TODO Auto-generated method stub
+		game = null;
+		showMessage("游戏已结束！！");
+		
 
 	}
 
+	// 关于
 	private void aboutGame() {
 		// TODO Auto-generated method stub
 
 	}
 
+	// 开始游戏
 	private void startGame() {
 		// TODO Auto-generated method stub
 		showMessage("游戏开始!!");
